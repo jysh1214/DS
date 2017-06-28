@@ -1,5 +1,7 @@
 #!/usr/bin/env/ python3
 
+import sys
+
 def fac_interation(n):
     if n == 0: return 1
     s = 1
@@ -7,4 +9,4 @@ def fac_interation(n):
     return s
 
 if __name__ == '__main__':
-    print(fac_interation(5))
+    print(fac_interation(int(sys.argv[1])))
