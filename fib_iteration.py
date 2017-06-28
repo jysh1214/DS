@@ -1,5 +1,7 @@
 #!/usr/bin/env/ python3
 
+import sys
+
 def fib_iteration(n):
     if n == 0: return 0
     if n == 1: return 1
@@ -9,4 +11,4 @@ def fib_iteration(n):
     return b
 
 if __name__ == '__main__':
-    print(fib_iteration(10))
+    print(fib_iteration(int(sys.argv[1])))
