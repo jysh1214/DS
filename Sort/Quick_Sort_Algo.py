@@ -1,7 +1,7 @@
 import random
 
 def Quicksort(A, p, r):
-    if (p<r):
+    if p < r:
         [A, q] = Partition(A, p, r)
         #A[p:q] = 
         Quicksort(A, p, q)
