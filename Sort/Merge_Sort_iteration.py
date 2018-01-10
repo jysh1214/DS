@@ -1,7 +1,6 @@
 import random
 
 def Mergesort(A):
-    # input: unsorted A_list; output: sorted A
     temp_1 = []
     temp_2 = []
     i = 0
