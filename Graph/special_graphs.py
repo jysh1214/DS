@@ -134,10 +134,10 @@ def star(n):
     Raises:
         ValueError, TypeError
     """
-    start_adj = [[0 for i in range(n)] for j in range(n)]
+    start_adj = [[0 for i in range(n+1)] for j in range(n+1)]
     for i in range(n):
-        start_adj[i][n-1] = 1
-        start_adj[n-1][i] = 1 # center vertex
+        start_adj[i][n] = 1
+        start_adj[n][i] = 1 # center vertex
 
     return start_adj
 
