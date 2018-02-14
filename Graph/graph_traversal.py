@@ -9,7 +9,7 @@ class GT():
     def dfs(self, start):
         """Depth first search
         Parameters:
-            start(int): Start vertex number.
+            start(int): Start vertex No..
 
         Returns:
             self.visited(list): Record the vertices have been visited.
@@ -34,7 +34,7 @@ class GT():
     def bfs(self, start):
         """Breadth first search
         Parameters:
-            start(int): Start vertex number.
+            start(int): Start vertex No..
 
         Returns:
             self.visited(list): Record the vertices have been visited.
