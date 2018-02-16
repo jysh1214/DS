@@ -72,8 +72,11 @@ class PT():
         visited.append(v_a)
 
         if v_a == v_b:
-            self.all_path_list.append(visited)
-            print(visited)
+            a = []
+            a = put_all(visited, a)
+            self.all_path_list.append(a)
+            # print(visited)
+        
         else:
             # from get_neighbor
             a_nb = nbs(v_a, self.Adjacency_Matrix)
@@ -82,7 +85,7 @@ class PT():
                     self.all_path(a_nb[i], a_nb[i], v_b, visited)
                     visited.remove(visited[-1]) ### backtracking ###
 
-            #return self.all_path_list
+        return self.all_path_list
 
     def check_path(self, v_a, v_b, block): # done
         """
@@ -109,3 +112,8 @@ class PT():
             return True
         else:
             return False
+
+def put_all(a, b):
+    for i in a:
+        b.append(i)
+    return b
