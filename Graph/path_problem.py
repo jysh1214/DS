@@ -1,9 +1,10 @@
-from get_neighbor import nbs
+from get_imformation import GI
 from graph_traversal import GT
 
 class PT():
-    def __init__(self, adj_matrix):
+    def __init__(self, adj_matrix, ins_matrix):
         self.Adjacency_Matrix = adj_matrix
+        self.Insidence_Matrix = ins_matrix
         self.N = len(self.Adjacency_Matrix)
         self.all_path_list = []
 
@@ -32,8 +33,9 @@ class PT():
         if v_a == v_b:
             return path
 
-        # from get_neighbor
-        a_nb = nbs(v_a, self.Adjacency_Matrix)
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        a_nb = gi.get_nb(v_a)
         if v_b in a_nb:
             path.append(v_b)
             return path
@@ -47,11 +49,9 @@ class PT():
 
             return self.get_path(next, v_b, path)
 
-    def all_path(self, start, v_a, v_b, visited):
+    def all_path(self, v_a, v_b, visited, block):
         """
         Parameters:
-            start(int): Input data as same as v_a first.
-
             v_a(int): Start vertex No..
 
             v_b(int): Destinated vertex No..
@@ -59,6 +59,8 @@ class PT():
             visited(list):
                 Record visited vertices.
                 Input empty list([]) first generally.
+
+            block(list): Banned vertices list.
 
         Returns:
             all_path_list(list): All path from v_a to v_b.
@@ -78,12 +80,14 @@ class PT():
             # print(visited)
         
         else:
-            # from get_neighbor
-            a_nb = nbs(v_a, self.Adjacency_Matrix)
+            # from get_imformation
+            gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+            a_nb = gi.get_nb(v_a)
             for i in range(len(a_nb)):
                 if (not(a_nb[i] in visited)) and self.check_path(a_nb[i], v_b, visited):
-                    self.all_path(a_nb[i], a_nb[i], v_b, visited)
-                    visited.remove(visited[-1]) ### backtracking ###
+                    if not (a_nb[i] in block):
+                        self.all_path(a_nb[i], v_b, visited, block)
+                        visited.remove(visited[-1]) ### backtracking ###
 
         return self.all_path_list
 
