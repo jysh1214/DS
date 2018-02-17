@@ -44,6 +44,9 @@ class DS():
     def same_set(self, v_a, v_b):
         """
         Parameters:
+            v_a(int): Vertex No..
+
+            v_b(int): Vertex No..
 
         Returns:
             bool.:If v_a and v_b belong same set, return True.
