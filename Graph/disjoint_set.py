@@ -12,8 +12,6 @@ class DS():
                    return i
 
         def conn(a, b):
-            # which set 'a' belong
-            a_set = []
             for i in range(len(self.set)):
                 if a in self.set[i]:
                     a_set = self.set[i]
@@ -25,10 +23,12 @@ class DS():
 
             return False
 
-        def part(v):
+        def partion(v):
             flag = False
+            # find which set vertex belong
             for i in range(len(self.set)):
                 if conn(self.set[i][0], v):
+                    # 'v' belong set_i
                     self.set[i].append(v)
                     flag = True
             if not flag: # new partion
@@ -36,10 +36,10 @@ class DS():
 
         # repartition
         for i in range(len(self.con_ver)):
-            part(self.con_ver[i])
+            partion(self.con_ver[i])
 
-        part(v_a)
-        part(v_b)
+        partion(v_a)
+        partion(v_b)
 
     def same_set(self, v_a, v_b):
         """
@@ -55,3 +55,5 @@ class DS():
             if v_a in self.set[i]:
                 if v_b in self.set[i]:
                     return True
+
+        return False
