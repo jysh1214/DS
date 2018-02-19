@@ -8,47 +8,6 @@ class PT():
         self.N = len(self.Adjacency_Matrix)
         self.all_path_list = []
 
-    def get_path(self, v_a, v_b, path):
-        """
-        Parameters:
-            v_a(int): Start vertex No..
-
-            v_b(int): Destinated vertex No..
-
-        Returns:
-            path(list): A path from v_a to v_b.
-                        Input empty list([]) first generally.
-
-        Attention:
-            Don't accept fork road.
-
-        Raises:        
-            ValueError, TypeError
-        """
-        path.append(v_a)
-
-        if not self.check_path(v_a, v_b, []):
-            return False
-
-        if v_a == v_b:
-            return path
-
-        # from get_imformation
-        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
-        a_nb = gi.get_nb(v_a)
-        if v_b in a_nb:
-            path.append(v_b)
-            return path
-
-        if (len(a_nb)>2) or (len(a_nb)==0): return False
-        else:  
-            if a_nb[0] != v_a:
-                next = a_nb[0]
-            else:
-                next = a_nb[1]
-
-            return self.get_path(next, v_b, path)
-
     def all_path(self, v_a, v_b, visited, block):
         """
         Parameters:
