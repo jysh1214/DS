@@ -85,7 +85,7 @@ class SP():
             dist.append([math.inf for i in range(self.N)])
             dist[step][start] = 0
             arrival_list = []
-            # collect vertices can arrice
+            # collect vertices can arrive
             for k in range(len(bool_matrix)):
                 if bool_matrix[start, k]:
                     arrival_list.append(k)
