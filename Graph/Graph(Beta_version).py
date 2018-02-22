@@ -403,6 +403,33 @@ class Graph():
         # from min_spanning_tree
         mst = MST(self.Adjacency_Matrix, self.Insidence_Matrix)
         return mst.prims_algo()
+
+    ### shortest path problem ###
+
+    def Dijkstra_algo(self, start):
+        """
+        Returns:
+            dist(list): Start vertex to all the others vertices distance.
+
+        Attention:
+            Negative weight could make misjudgment.
+
+        Raises:
+            ValueError, TypeError
+        """
+        # from shortest_path_problem
+        sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return sp.dijkstra_algo(start)
+
+    def Bellman_Ford_algo(self):
+        # from shortest_path_problem
+        sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return sp.bellman_ford_algo(start)
+
+    def Floyd_Warshall_algo(self):
+        # from shortest_path_problem
+        sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return sp.floyd_warshall_algo()    
         
     ### AOV problem ###
 
