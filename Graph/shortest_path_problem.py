@@ -114,3 +114,29 @@ class SP():
             # while end
 
         return dist[step-1]
+
+    def floyd_warshall_algo(self):
+        """
+        Returns:
+            dist(list): Shortest path of all pairs.
+
+        Raises:
+            ValueError, TypeError
+        """
+        dist_matrix = []
+        for i in range(self.N):
+            dist_matrix.append([])
+            for j in range(self.N):
+                if (self.Adjacency_Matrix[i][j]==0) and (i!=j):
+                    dist_matrix[i].append(math.inf)
+                else:
+                    dist_matrix[i].append(self.Adjacency_Matrix[i][j])
+
+        for h in range(self.N):
+            for k in range(self.N):
+                for l in range(self.N): 
+                    if (k != h) and (l != h):
+                        dist_matrix[k][l] = min(dist_matrix[k][l],\
+                                                dist_matrix[k][h]+dist_matrix[h][l])
+
+        return dist_matrix
