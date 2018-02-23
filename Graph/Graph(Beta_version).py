@@ -58,13 +58,12 @@ class Graph():
         
         self.N = len(adj_matrix)
 
-        # check data length
         for i in range(self.N):
             if len(adj_matrix[i]) != self.N:
-                print('Input adjacency matrix error!')
+                print('Input data error!')
                 return False
 
-            else: self.Adjacency_Matrix = adj_matrix
+        self.Adjacency_Matrix = adj_matrix
 
         self.Directed = False
         for i in range(self.N):
@@ -73,28 +72,27 @@ class Graph():
                    self.Adjacency_Matrix[j][i]:
                    self.Directed = True 
 
-        # undireted graph
-        if not self.Directed: 
-            degree = []
-            for i in range(self.N):
-                temp = 0
-                for j in range(self.N):
-                    if self.Adjacency_Matrix[i][j] != 0:
-                        temp += 1
-                degree.append(temp)
+        total_in_degree = 0
+        for i in range(self.N):
+            in_degree = 0
+            for j in range(self.N):
+                if self.Adjacency_Matrix[i][j] != 0:
+                    in_degree += 1
+            total_in_degree += in_degree
 
-            self.degree = degree
+        total_out_degree = 0
+        for i in range(self.N):
+            out_degree = 0
+            for j in range(self.N):
+                if self.Adjacency_Matrix[j][i] != 0:
+                    out_degree += 1
+            total_out_degree += out_degree
 
-            total_degree = 0
-            for i in range(self.N):
-                total_degree += self.degree[i]
-
-            # 2*|E| = degree sum
-            self.edges = int(total_degree/2)
-            
-        # digraph
+        if self.Directed:
+            self.edges = total_in_degree + total_out_degree
         else:
-            pass
+            # total degree = total in degree = total out degree
+            self.edges = int(total_in_degree/2)
 
         if ins_matrix != None:
             for i in range(self.N):
@@ -104,7 +102,7 @@ class Graph():
 
                 else: self.Insidence_Matrix = ins_matrix
 
-        elif not self.Directed: # auto create incidence matrix if undirected
+        else:
             ins_matrix = [[0 for i in range(self.edges)] for j in range(self.N)]
             e = 0
             while e < self.edges:
@@ -114,8 +112,6 @@ class Graph():
                             ins_matrix[i][e] = 1
                             ins_matrix[j][e] = 1
                             e += 1
-
-            self.Insidence_Matrix = ins_matrix
 
         if V == None:
             V = [i for i in range(self.N)]
