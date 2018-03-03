@@ -85,19 +85,18 @@ class SP():
             dist.append([math.inf for i in range(self.N)])
             dist[step][start] = 0
             arrival_list = []
-            # collect vertices can arrive
+            # collect reachable vertices
             for k in range(len(bool_matrix)):
                 if bool_matrix[start, k]:
                     arrival_list.append(k)
 
             for l in range(len(arrival_list)):
                 n = arrival_list[l]
-                # collect u: vertex can go to n
-                u = []
-                for t in range(self.N):
-                    if self.Adjacency_Matrix[t][n] != 0:
-                        u.append(t)
-
+                # collect u: predecessor vertices of the vertex
+                # from get_imformation
+                gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+                u = gi.get_pre(n)
+            
                 # find min(dist[step-1][u]+weight(u, n))
                 min_ = math.inf
                 for r in range(len(u)):
