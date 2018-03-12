@@ -1,61 +1,12 @@
-from get_imformation import GI
 from graph_traversal import GT
-from path_problem import PT
+from get_imformation import GI
 from min_spanning_tree import MST
-import numpy as np
+from path_problem import PT
+from shortest_path_problem import SP
+from HE_problem import HE
 
 class Graph():
     def __init__(self, adj_matrix, ins_matrix, V, E, region, R):
-        """
-        Parameters:
-            adj_matrix(list):
-                The adjacency matrix of the graph.
-
-            ins_matrix(list):
-                The incidence matrix of the graph.
-                Auto creat if the graph is undirect.
-
-            V(list): 
-                Vertex name list.
-                V = [Vertex_0 name, Vertex_1 name, ...], default 0~n if input None
-
-            E(list): 
-                Edge name list.
-                E = [Edge_0 name, Edge_1 name, ...], default 0~m if input None
-
-            region(list):
-                A matrix record region surrounded by which edges.
-                region = Region_0|Region_1 ...
-                   Edge_0    1   |    0
-                   Edge_1    1   |    1  
-                       ...
-                EX:
-                region[a][x] = region[b][x] = region[c][x] = 1: 
-                region_x surrounded by edge_a, b, c
-
-                It's planar graph difinition.
-                input None if none
-
-            R(list):
-                Region name list.
-                R = [Region_0 name, Region_1 name, ...], input None if none
-
-        Vars:
-            degree(list): Degree of vertex list.
-
-            edges(int): How many edges. 
-
-        Raises:
-            ValueError, TypeError
-
-        """
-
-        """
-        ex: simple undirect G = (V, E), A = adjacency matrix, B = incidence matrix
-
-            g = Graph(A, B, None, None, None, None)
-        """
-        
         self.N = len(adj_matrix)
 
         for i in range(self.N):
@@ -113,30 +64,14 @@ class Graph():
                             ins_matrix[j][e] = 1
                             e += 1
 
+        """
         if V == None:
-            V = [i for i in range(self.N)]
-        else:
-            if len(V) == self.N:
-                self.V = V
-            else:
-                print('Input V error!')
-                return False
-
+            self.V = [i for i in range(self.N)]
+        else: self.V = V
+ 
         if E == None:
-            E = [i for i in range(len(self.Insidence_Matrix[0]))]
-        else:
-            if len(E) == len(self.Insidence_Matrix[0]):
-                self.E = E
-            else:
-                print('Input E error!')
-                return False              
-
-        self.Region = region
-
-        if self.Region == None:
-            self.R = None
-        else:
-            self.R = R
+            self.E = [i for i in range(len(self.Insidence_Matrix[0]))]
+        else: self.E = E"""
 
     def get_degree(self, vertex):
         """
@@ -153,32 +88,35 @@ class Graph():
 
         Raises:
             ValueError, TypeError
-        """
-        
+        """   
         try:
             int(vertex)
         except:
             vertex = name_to_num(vertex, self.V)
 
-        if not self.Direct:
-            return self.degree[vertex]
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return gi.get_degree()
 
-    def get_isol(self):
-        """
-        Returns:
-            isol(list): Isolated vertices.
+    def in_degree(self, vertex):
+        try:
+            int(vertex)
+        except:
+            vertex = name_to_num(vertex, self.V)
 
-        Raises:
-            ValueError, TypeError
-        """
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return gi.get_in_degree()
 
-        isol = []
-        for i in range(self.N):
-            for j in range(self.N):
-                if (self.Adjacency_Matrix[i][j]==0) and (i!=j):
-                    isol.append([i])
+    def out_degree(self, vertex):
+        try:
+            int(vertex)
+        except:
+            vertex = name_to_num(vertex, self.V)
 
-        return isol
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return gi.get_out_degree()
 
     def get_nb(self, vertex):
         """
@@ -201,7 +139,53 @@ class Graph():
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
         return gi.get_nb(vertex)
-        
+
+    def get_re(self, vertex):
+        """
+        Parameters:
+            vertex(int): Vertex No..
+
+        Returns:
+            nbs_list(list): All reachable vertices of the vertex. 
+
+        Attention:
+            Undirected graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        try: 
+            int(vertex)
+        except:
+            vertex = name_to_num(vertex, self.V)
+
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return gi.get_reachable(vertex)
+
+    def get_pre(self, vertex):
+        """
+        Parameters:
+            vertex(int): Vertex No..
+
+        Returns:
+            nbs_list(list): All predecessor vertices of the vertex. 
+
+        Attention:
+            Undirected graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        try: 
+            int(vertex)
+        except:
+            vertex = name_to_num(vertex, self.V)
+
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return gi.get_predecessor(vertex)
+
     def get_edge(self, v_a, v_b):
         """
         Parameters:
@@ -236,6 +220,12 @@ class Graph():
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
         return gi.get_edge(v_a, v_b)
 
+    def get_head(self, edge):
+        pass
+
+    def get_tail(self, edge):
+        pass
+
     def get_weight(self, edge):
         """
         Parameters:
@@ -257,23 +247,17 @@ class Graph():
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
         return gi.get_weight(edge)
 
-    ### Decision problem ###
-
     def check_con(self):
-        """
-        Vars:
-            self.Adjacency_Matrix
+        # check connected
+        # return False if exist component
 
-        Returns:
-            bool.:If the graph connected, return True.
-        """
+        for i in range(self.N):
+            for j in range(self.N):
+                if (self.Adjacency_Matrix[i][j]!=0) and (i!=j):
+                    return False
 
-        dfs = self.DFS(0, [])
-        if len(dfs) == self.N:
-            return True
-        else:
-            return False
-            
+        return True
+
     def check_compl(self):
         # if the graph is complete, return True
 
@@ -282,21 +266,21 @@ class Graph():
                 if (self.Adjacency_Matrix[i][j]==0) and (i!=j):
                     return False
 
-        return True        
+        return True
 
-    def check_isol(self): 
-        # if exit isolate vertex, return True
+    def check_isol(self):
+        # if exit isolate node, return True
+
+        if self.check_con: return False
 
         for i in range(self.N):
-            flag = True
             for j in range(self.N):
-                if (self.Adjacency_Matrix[i][j]!=0) and (i!=j):
-                    flag = False
-            if flag: return True
+                if (self.Adjacency_Matrix[i][j]>=1) and (i!=j):
+                    return False
 
-        return False
+        return True
 
-    def check_path(self, v_a, v_b, block):
+    def check_path(self, v_a, v_b, block): # done
         """
         Parameters:
             v_a(int): Vertex No..
@@ -331,40 +315,35 @@ class Graph():
         p = PT(self.Adjacency_Matrix)
 
         return p.check_path(v_a, v_b, block)
-        
+
     ### graph traversal ###
 
     def DFS(self, start, block):
         """Depth first search
         Parameters:
-            start(int): Start vertex number.
+            start(int): Start vertex No..
 
             start(str): Start vertex name.
 
-        Vars:
-            color(list): The color of vertex.
+            block(int): Banned vertex No..
 
-            time(list): The recovered time and finish time of vertex.
-
-            parents(list): The parents of vertex.
+            block(str): Banned vertex name.
 
         Attention:
             Small vertex No. has high priority.
 
         Returns:
             dfs(list):
-
-        Raises:
-            ValueError, TypeError
         """
         try:
             int(start)
         except:
-            start = name_to_num(start, self.V)
+            start = name_to_num(start)
 
+        # from graph_traversal.py
         gt = GT(self.Adjacency_Matrix)
 
-        return gt.dfs(start)
+        return gt.dfs(start, block)
 
     def BFS(self, start):
         """Breadth first search
@@ -388,18 +367,6 @@ class Graph():
 
         return gt.bfs(start)
 
-    ### min spainning tree ###
-    
-    def Kruskal_algo(self):
-        # from min_spanning_tree
-        mst = MST(self.Adjacency_Matrix, self.Insidence_Matrix)
-        return mst.kruskal_algo()
-
-    def Prims_algo(self):
-        # from min_spanning_tree
-        mst = MST(self.Adjacency_Matrix, self.Insidence_Matrix)
-        return mst.prims_algo()
-
     ### shortest path problem ###
 
     def Dijkstra_algo(self, start):
@@ -417,7 +384,7 @@ class Graph():
         sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
         return sp.dijkstra_algo(start)
 
-    def Bellman_Ford_algo(self):
+    def Bellman_Ford_algo(self, start):
         # from shortest_path_problem
         sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
         return sp.bellman_ford_algo(start)
@@ -425,17 +392,13 @@ class Graph():
     def Floyd_Warshall_algo(self):
         # from shortest_path_problem
         sp = SP(self.Adjacency_Matrix, self.Insidence_Matrix)
-        return sp.floyd_warshall_algo()    
-        
+        return sp.floyd_warshall_algo()
+
     ### AOV problem ###
 
-    def all_path(self, start, v_a, v_b, visited):
+    def all_path(self,v_a, v_b, visited, block):
         """
         Parameters:
-            start(int): Input data as same as v_a first.
-
-            start(str): Input data as same as v_a first.
-
             v_a(int): Start vertex No..
 
             v_a(str): Start vertex name.
@@ -448,6 +411,8 @@ class Graph():
                 Record visited vertices.
                 Input empty list([]) first generally.
 
+            block(list): Banned vertices list.
+
         Returns:
             all_path_list(list): All path from v_a to v_b.
 
@@ -457,11 +422,6 @@ class Graph():
         Raises:
             ValueError, TypeError
         """
-        try:
-            int(start)
-        except:
-            start = name_to_num(start, self.V)
-
         try:
             int(v_a)
         except:
@@ -473,11 +433,101 @@ class Graph():
             v_b = name_to_num(v_b, self.V)
 
         # from path_problem
-        p = PT(self.Adjacency_Matrix)
+        p = PT(self.Adjacency_Matrix, self.Insidence_Matrix)
 
-        return p.all_path(start, v_a, v_b, [])  
-        
-# the others function
+        return p.all_path(v_a, v_b, visited, block)
+
+    ### min spainning tree ###
+    
+    def Kruskal_algo(self):
+        # from min_spanning_tree
+        mst = MST(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return mst.kruskal_algo()
+
+    def Prims_algo(self, root):
+        # from min_spanning_tree
+        mst = MST(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return mst.prims_algo(root)
+
+    def EC(self, start):
+        # return all Eulerian circuit
+        # could start from any vertex
+        """
+        Returns:
+            EC_set(list):
+
+        Vars:
+            self.N(int):
+
+        Raises:
+            ValueError, TypeError
+        """
+        try:
+            int(start)
+        except:
+            start = name_to_num(start, self.V)
+
+        # from HE_problem
+        he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return he.ec(start)
+
+
+    def HC(self, start): 
+        # return all Hamiltonian cycle
+        # could start from any vertex
+        """
+        Returns:
+            HC_set(list):
+
+        Vars:
+            self.N(int):
+
+        Raises:
+            ValueError, TypeError
+        """
+        try:
+            int(start)
+        except:
+            start = name_to_num(start, self.V)
+
+        # from HE_problem
+        he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return he.hc(start)
+
+    def ET(self, v_a): 
+        """
+        Returns:
+            Return all Eulerian trail(chain)
+
+        Raises:
+            ValueError, TypeError
+        """
+
+        # from HE_problem
+        he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return he.et(v_a)
+
+    def HP(self, v_a, v_b): 
+        # return all Hamiltonian path
+        """
+        Returns:
+            HP_set(list): 
+
+        Vars:
+            self.N(int):
+
+        Raises:
+            ValueError, TypeError
+        """
+        try:
+            int(v_a)
+        except:
+            v_a = name_to_num(v_a, self.V)
+
+        # from HE_problem
+        he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return he.hp(v_a, v_b)
+
 
 def put_all(a, b):
     for i in a:
