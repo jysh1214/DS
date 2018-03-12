@@ -65,6 +65,9 @@ class GI():
         Returns:
             nbs_list(list): All neighbors of the vertex. 
 
+        Attention:
+            Undirected graph difinition.
+
         Raises:
             ValueError, TypeError
         """
@@ -74,6 +77,48 @@ class GI():
                 nbs_list.append(i)
 
         return nbs_list
+
+    def get_re(self, vertex):
+        """
+        Parameters:
+            vertex(int): Vertex No..
+
+        Returns:
+            nbs_list(list): All reachable vertices of the vertex. 
+
+        Attention:
+            Directed graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        re_list = []
+        for i in range(len(self.Adjacency_Matrix)):
+            if self.Adjacency_Matrix[vertex][i] != 0:
+                re_list.append(i)
+
+        return re_list
+
+    def get_pre(self, vertex):
+        """
+        Parameters:
+            vertex(int): Vertex No..
+
+        Returns:
+            nbs_list(list): All predecessor vertices of the vertex. 
+
+        Attention:
+            Directed graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        pe_list = []
+        for i in range(len(self.Adjacency_Matrix)):
+            if self.Adjacency_Matrix[i][vertex] != 0:
+                pe_list.append(i)
+
+        return pe_list
 
     def get_edge(self, v_a, v_b):
         """
@@ -88,17 +133,33 @@ class GI():
         Attention:
             Two vertices must be adjacent.
 
+            Return a edge from v_a to v_b in directed graph.
+
         Raises:
             ValueError, TypeError
         """
-        if (self.Adjacency_Matrix[v_a][v_b]==0) and\
-           (self.Adjacency_Matrix[v_b][v_a]==0):
+        if self.Adjacency_Matrix[v_a][v_b] == 0:
             return False
 
         for i in range(len(self.Insidence_Matrix[0])):
             if (self.Insidence_Matrix[v_a][i]==1) and\
                (self.Insidence_Matrix[v_b][i]==1):
-               return i
+                return i
+
+    def get_inter(self, edge_1, edge_2):
+        """
+        Returns: Intersection verdex of two edge.
+        """
+        for i in range(self.N):
+            if self.Insidence_Matrix[i][edge_1] and \
+               self.Insidence_Matrix[i][edge_2]:
+                return i
+
+    def get_head(self, edge):
+        pass
+
+    def get_tail(self, edge):
+        pass
 
     def get_weight(self, edge):
         """
@@ -118,6 +179,10 @@ class GI():
             return self.Adjacency_Matrix[v_b][v_a]
 
     def edge_term(self, edge):
+        """
+        Attention:
+            Undirected graph difinition.
+        """
         temp = []
         for i in range(len(self.Insidence_Matrix)):
             if self.Insidence_Matrix[i][edge] == 1:
