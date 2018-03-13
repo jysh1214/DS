@@ -49,11 +49,10 @@ class DS():
             flag = False
             for j in range(1, len(self.set)):
                 for k in range(0, j-1):
-                    for m in range(self.set[k]):
-                        if conn(self.set[k][m], self.set[j]):
-                            self[k] = put_all(self.set[j], self.set[k])
-                            self.set[j] = []
-                            flag = True
+                    if conn(self.set[k][0], self.set[j]):
+                        self[k] = put_all(self.set[j], self.set[k])
+                        self.set[j] = []
+                        flag = True
 
             self.set = list(filter(lambda x: x != [], self.set))
 
