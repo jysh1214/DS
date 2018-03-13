@@ -11,6 +11,7 @@ class DS():
                    (self.Insidence_Matrix[b][i]==1):
                    return i
 
+        # check 'a', 'b' connected => 'a', 'b' are in same set
         def conn(a, b):
             for i in range(len(self.set)):
                 if a in self.set[i]:
@@ -25,7 +26,7 @@ class DS():
 
         def partion(v):
             flag = False
-            # find which set vertex belong
+            # find which set the vertex belong
             for i in range(len(self.set)):
                 if conn(self.set[i][0], v):
                     # 'v' belong set_i
@@ -38,8 +39,29 @@ class DS():
         for i in range(len(self.con_ver)):
             partion(self.con_ver[i])
 
+        # merge set
+        if len(self.set) == 1:
+            flag = False
+        else:
+            flag = True
+
+        while flag:
+            flag = False
+            for j in range(1, len(self.set)):
+                for k in range(0, j-1):
+                    for m in range(self.set[k]):
+                        if conn(self.set[k][m], self.set[j]):
+                            self[k] = put_all(self.set[j], self.set[k])
+                            self.set[j] = []
+                            flag = True
+
+            self.set = list(filter(lambda x: x != [], self.set))
+
         partion(v_a)
         partion(v_b)
+
+    def get_set(self):
+        return self.set
 
     def same_set(self, v_a, v_b):
         """
@@ -57,3 +79,8 @@ class DS():
                     return True
 
         return False
+
+def put_all(a, b):
+    for i in a:
+        b.append(i)
+    return b
