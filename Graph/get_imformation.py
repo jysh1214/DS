@@ -32,11 +32,8 @@ class GI():
         return degree
 
     def get_in_degree(self, vertex):
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
-
+        """
+        """
         in_degree = 0
         for i in range(self.N):
             if self.Adjacency_Matrix[i][vertex] != 0:
@@ -45,11 +42,8 @@ class GI():
         return in_degre
 
     def get_out_degree(self, vertex):
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
-
+        """
+        """
         out_degree = 0
         for i in range(self.N):
             if self.Adjacency_Matrix[vertex][i] != 0:
@@ -113,12 +107,12 @@ class GI():
         Raises:
             ValueError, TypeError
         """
-        pe_list = []
+        pre_list = []
         for i in range(len(self.Adjacency_Matrix)):
             if self.Adjacency_Matrix[i][vertex] != 0:
-                pe_list.append(i)
+                pre_list.append(i)
 
-        return pe_list
+        return pre_list
 
     def get_edge(self, v_a, v_b):
         """
@@ -156,10 +150,44 @@ class GI():
                 return i
 
     def get_head(self, edge):
-        pass
+        """
+        Parameters:
+            edge(int): Edge No.
+
+        Returns:
+            int.: The head vertex of the edge.
+
+        Attention:
+            Directed graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        (a, b) = self.edge_term(edge)
+        if self.Adjacency_Matrix[a][b] != 0:
+            return b
+        else:
+            return a
 
     def get_tail(self, edge):
-        pass
+        """
+        Parameters:
+            edge(int): Edge No.
+
+        Returns:
+            int.: The tail vertex of the edge.
+
+        Attention:
+            Directed graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        (a, b) = self.edge_term(edge)
+        if self.Adjacency_Matrix[a][b] != 0:
+            return a
+        else:
+            return b
 
     def get_weight(self, edge):
         """
