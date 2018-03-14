@@ -3,6 +3,7 @@ from get_imformation import GI
 from min_spanning_tree import MST
 from path_problem import PT
 from shortest_path_problem import SP
+from domination import DM
 from HE_problem import HE
 
 class Graph():
@@ -64,11 +65,10 @@ class Graph():
                             ins_matrix[j][e] = 1
                             e += 1
 
-        """
         if V == None:
             self.V = [i for i in range(self.N)]
         else: self.V = V
- 
+        """
         if E == None:
             self.E = [i for i in range(len(self.Insidence_Matrix[0]))]
         else: self.E = E"""
@@ -89,30 +89,21 @@ class Graph():
         Raises:
             ValueError, TypeError
         """   
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        vertex = name_to_num(vertex, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
         return gi.get_degree()
 
     def in_degree(self, vertex):
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        vertex = name_to_num(vertex, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
         return gi.get_in_degree()
 
     def out_degree(self, vertex):
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        vertex = name_to_num(vertex, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
@@ -131,10 +122,7 @@ class Graph():
         Raises:
             ValueError, TypeError
         """
-        try: 
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        vertex = name_to_num(vertex, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
@@ -154,10 +142,7 @@ class Graph():
         Raises:
             ValueError, TypeError
         """
-        try: 
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        vertex = name_to_num(vertex, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
@@ -206,15 +191,8 @@ class Graph():
         Raises:
             ValueError, TypeError
         """
-        try:
-            int(v_a)
-        except:
-            v_a = name_to_num(v_a, self.V)
-
-        try:
-            int(v_b)
-        except:
-            v_b = name_to_num(v_b, self.V)
+        v_a = name_to_num(v_a, self.V)
+        v_b = name_to_num(v_b, self.V)
 
         # from get_imformation
         gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
@@ -494,7 +472,7 @@ class Graph():
         he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
         return he.hc(start)
 
-    def ET(self, v_a): 
+    def ET(self, start): 
         """
         Returns:
             Return all Eulerian trail(chain)
@@ -505,7 +483,7 @@ class Graph():
 
         # from HE_problem
         he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
-        return he.et(v_a)
+        return he.et(start)
 
     def HP(self, v_a, v_b): 
         # return all Hamiltonian path
@@ -528,6 +506,53 @@ class Graph():
         he = HE(self.Adjacency_Matrix, self.Insidence_Matrix)
         return he.hp(v_a, v_b)
 
+    ### domination ###
+
+    def clique(self):
+        """
+        Attention:
+            Maximal
+        """
+        # from domination
+        dm = DM(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return dm.clique()
+
+    def indp_set(self):
+        """
+        Attention:
+            Maximal
+        """
+        # from domination
+        dm = DM(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return dm.indp_set()
+
+    def dominating_set(self):
+        """
+        Attention:
+            Minimal
+        """
+        # from domination
+        dm = DM(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return dm.dominating_set()
+
+    def vertex_cover(self):
+        """
+        Attention:
+            Minimal
+        """
+        # from domination
+        dm = DM(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return dm.vertex_cover()
+
+    def edge_cover(self):
+        """
+        Attention:
+            Minimal
+        """
+        # from domination
+        dm = DM(self.Adjacency_Matrix, self.Insidence_Matrix)
+        return dm.edge_cover()
+
 
 def put_all(a, b):
     for i in a:
@@ -538,9 +563,13 @@ def put_all(a, b):
 def name_to_num(name, chart):
     # input: name_str
     # output: number_int of name in chart
+    try:
+        int(name)
+        return name
 
-    for i in range(len(chart)):
-        if chart[i] == name:
-            return i
+    except:
+        for i in range(len(chart)):
+            if chart[i] == name:
+                return i
 
-    return False
+        return False
