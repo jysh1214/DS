@@ -43,12 +43,14 @@ class DM:
 
         for offset in range(self.N):
             for b in range(self.N):
+                # use circular queue
                 i = (b+offset)%self.N
                 
                 if vertex[i] in used_vertex:
                     continue
 
                 temp_set.append(vertex[i])
+                # find the clique contain vertex[i]
                 clique_recursion(vertex[i])
                 used_vertex = list(set(temp_set)|set(used_vertex))
 
@@ -88,6 +90,7 @@ class DM:
 
             while len(selected)+len(non_selected) < self.N:
                 for b in range(self.N):
+                    # use circular queue
                     i = (b+offset)%self.N
                     if not vertex[i] in non_selected:
                         selected.append(vertex[i])
@@ -130,6 +133,7 @@ class DM:
 
             while len(selected)+len(non_selected) < self.N:
                 for b in range(self.N):
+                    # use circular queue
                     i = (b+offset)%self.N
                     if not vertex[i] in non_selected:
                         selected.append(vertex[i])
@@ -152,13 +156,48 @@ class DM:
 
     def vertex_cover(self):
         """
+        Method:
+            Greedy algorithm.
+
         Returns:
             Minimal vertex cover set.
 
         Attention:
             Minimal
         """
-        pass
+        selected = []
+        cov_edge = []
+
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+
+        degree = []
+        for i in range(self.N):
+            degree.append([i, gi.get_degree(i)]) # [vertex No, degree]
+ 
+        degree = sorted(degree, key = lambda x: x[1], reverse = True)
+
+        while len(cov_edge) < len(self.Insidence_Matrix[0]):
+            vertex = degree[0][0] # select max degree vertex
+            selected.append(vertex)
+            nb = gi.get_nb(vertex)
+
+            # remove selected vertex
+            degree.remove(degree[0])
+
+            for j in range(len(nb)):
+                temp_edge = gi.get_edge(vertex, nb[j])
+                cov_edge = list(set([temp_edge])|set(cov_edge))
+
+                # degree of neighbor vertex reduxce 1
+                for k in range(len(degree)):
+                    if degree[k][0] == nb[j]:
+                        degree[k][1] -= 1
+
+            # resort
+            degree = sorted(degree, key = lambda x: x[1], reverse = True)
+
+        return selected
 
 
     def edge_cover(self):
@@ -169,7 +208,46 @@ class DM:
         Attention:
             Minimal
         """
-        pass
+        selected = []
+        cov_ver = []
+
+        # from get_imformation
+        gi = GI(self.Adjacency_Matrix, self.Insidence_Matrix)
+
+        # [edge No, vertex number of the edge]
+        e = len(self.Insidence_Matrix[0])
+        vertex_num = [[i, 2] for i in range(e)]
+        """
+        for i in range(len(self.Insidence_Matrix[0])):
+            vertex_num.append([i, 2]) # [edge No, vertex number of the edge]
+        print(vertex_num)
+        """
+
+        while len(cov_ver) < self.N:
+            edge = vertex_num[0][0]
+            selected.append(edge)
+
+            [a, b] = gi.edge_term(edge)
+            cov_ver = list(set([a, b])|set(cov_ver))
+
+            def reduce_(vertex):
+                nb = gi.get_nb(vertex)
+                for i in range(len(nb)):
+                    temp_edge = gi.get_edge(vertex, nb[i])
+                    for j in range(len(vertex_num)):
+                        if vertex_num[j][0] == temp_edge:
+                            vertex_num[j][1] -= 1
+                            break
+
+            
+            # number of vertex of terminal reduce 1
+            reduce_(a)
+            reduce_(b)
+
+            # sorted by number of vertex
+            vertex_num = sorted(vertex_num, key = lambda x: x[1], reverse = True)
+
+        return selected
 
 
 def put_all(a, b):
