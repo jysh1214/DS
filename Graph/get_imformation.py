@@ -2,13 +2,33 @@ class GI():
     def __init__(self, adj_matrix, ins_matrix):
         self.Adjacency_Matrix = adj_matrix
         self.Insidence_Matrix = ins_matrix
+        self.N = len(self.Adjacency_Matrix)
+
+
+    def check_conn(self, v_a, v_b):
+        """
+        Parameters:
+            v_a(int): Vertex No.
+
+            v_b(int): Vertex No.
+
+        Returns:
+            bool: Return True, if v_a and v_b is adjacent.
+
+        Attention:
+            Undirected graph difinition.
+
+        Raises:
+            ValueError, TypeError
+        """
+        if self.Adjacency_Matrix[v_a][v_b] != 0:
+            return True
+
 
     def get_degree(self, vertex):
         """
         Parameters:
-            vertex(int): Vertex No..
-
-            vertex(str): Vertex name.
+            vertex(int): Vertex No.
 
         Returns:
             self.degree[vertex](int): Degree of the input vertex.
@@ -19,17 +39,8 @@ class GI():
         Raises:
             ValueError, TypeError
         """
-        try:
-            int(vertex)
-        except:
-            vertex = name_to_num(vertex, self.V)
+        return self.get_in_degree(vertex)
 
-        degree = 0
-        for i in range(self.N):
-            if self.Adjacency_Matrix[vertex][i] != 1:
-                degree += 1
-
-        return degree
 
     def get_in_degree(self, vertex):
         """
@@ -39,7 +50,8 @@ class GI():
             if self.Adjacency_Matrix[i][vertex] != 0:
                 in_degree += 1
 
-        return in_degre
+        return in_degree
+
 
     def get_out_degree(self, vertex):
         """
@@ -50,6 +62,7 @@ class GI():
                 out_degree += 1
 
         return out_degree
+
 
     def get_nb(self, vertex):
         """
@@ -72,6 +85,7 @@ class GI():
 
         return nbs_list
 
+
     def get_re(self, vertex):
         """
         Parameters:
@@ -93,6 +107,7 @@ class GI():
 
         return re_list
 
+
     def get_pre(self, vertex):
         """
         Parameters:
@@ -113,6 +128,7 @@ class GI():
                 pre_list.append(i)
 
         return pre_list
+
 
     def get_edge(self, v_a, v_b):
         """
@@ -140,6 +156,7 @@ class GI():
                (self.Insidence_Matrix[v_b][i]==1):
                 return i
 
+
     def get_inter(self, edge_1, edge_2):
         """
         Returns: Intersection verdex of two edge.
@@ -147,7 +164,8 @@ class GI():
         for i in range(self.N):
             if self.Insidence_Matrix[i][edge_1] and \
                self.Insidence_Matrix[i][edge_2]:
-                return i
+                return 
+
 
     def get_head(self, edge):
         """
@@ -169,6 +187,7 @@ class GI():
         else:
             return a
 
+
     def get_tail(self, edge):
         """
         Parameters:
@@ -189,6 +208,7 @@ class GI():
         else:
             return b
 
+
     def get_weight(self, edge):
         """
         Parameters:
@@ -205,6 +225,7 @@ class GI():
             return self.Adjacency_Matrix[v_a][v_b]
         else:
             return self.Adjacency_Matrix[v_b][v_a]
+            
 
     def edge_term(self, edge):
         """
